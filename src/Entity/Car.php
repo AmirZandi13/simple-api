@@ -3,13 +3,23 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use App\Controller\CarReviewsController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /** A car. */
 #[ORM\Entity]
-#[ApiResource]
+#[ApiResource(operations: [
+    new Get(),
+    new Post(
+        uriTemplate: '/cars/{id}/reviews',
+        controller: CarReviewsController::class,
+        name: 'car-reviews'
+    )
+])]
 class Car
 {
     /** The ID of this car. */
