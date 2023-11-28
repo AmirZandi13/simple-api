@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: changeme
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  php:
+    build: .
+    volumes:
+      - .:/var/www
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - .:/var/www
+      - ./nginx/default.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8080:80
+    depends_on:
+      - php
+
+volumes:
+  db_data: {}
